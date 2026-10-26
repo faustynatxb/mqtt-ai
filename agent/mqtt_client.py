@@ -19,7 +19,22 @@ COMMAND_TOPIC = f"devices/{DEVICE_ID}/commands"
 RESPONSE_TOPIC = f"devices/{DEVICE_ID}/responses"
 
 
-def send_command(action, timeout=15):
+def build_command_payload(command_id, action, **parameters):
+    payload = {
+        "command_id": command_id,
+        "action": action,
+    }
+    payload.update(
+        {
+            name: value
+            for name, value in parameters.items()
+            if value is not None
+        }
+    )
+    return payload
+
+
+def send_command(action, timeout=15, **parameters):
     command_id = str(uuid.uuid4())
     finished = threading.Event()
     result = {}
@@ -38,10 +53,9 @@ def send_command(action, timeout=15):
             finished.set()
             return
 
-        payload = json.dumps({
-            "command_id": command_id,
-            "action": action
-        })
+        payload = json.dumps(
+            build_command_payload(command_id, action, **parameters)
+        )
 
         info = client.publish(
             COMMAND_TOPIC,

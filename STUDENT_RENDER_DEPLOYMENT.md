@@ -45,12 +45,11 @@ The agent verifies the project locally, then guides the student through the foll
    - `MQTT_USERNAME`
    - `MQTT_PASSWORD`
    - optional `MQTT_DEVICE_ID`
-   - optional `GRADIO_USERNAME` and `GRADIO_PASSWORD` only when they want to restrict access
 6. The agent verifies the deployed public `onrender.com` URL. It does not send a real MQTT command as part of deployment verification.
 
 ## Important limits
 
 - Render Free Web Services have 512 MB RAM and 0.1 CPU. They sleep after 15 minutes without traffic; the next visit can take about a minute to wake the app.
 - The filesystem is temporary. Do not store documents or a SQLite database on the service.
-- A Render Web Service has a public URL. Leave the Gradio credentials unset when the class should access the demo; set them only to restrict access.
+- A Render Web Service has a public URL. Anyone with the link can use the chat.
 - For a class, give each student a separate test device or isolated MQTT topic and credentials.

@@ -1,5 +1,4 @@
 import os
-import secrets
 import sys
 from pathlib import Path
 
@@ -46,23 +45,16 @@ def respond(message, history):
 demo = gr.ChatInterface(
     respond,
     title="ESP32 AI Agent",
-    description="Napisz po polsku, co agent ma zrobić z diodą LED.",
-    examples=["włącz LED", "wyłącz LED", "jaki jest stan LED"],
-    save_history=True,
+    description="Napisz po polsku, co agent ma zrobić z LED lub wybranym GPIO.",
+    examples=[
+        "ustaw GPIO 25 na wysoki przez 10 sekund",
+        "ustaw PWM 128 na GPIO 26 przez 5 sekund",
+        "odczytaj wejście analogowe z GPIO 34",
+    ],
 )
 
-def gradio_auth(username, password):
-    return (
-        secrets.compare_digest(username, os.getenv("GRADIO_USERNAME", ""))
-        and secrets.compare_digest(password, os.getenv("GRADIO_PASSWORD", ""))
-    )
-
-
 if __name__ == "__main__":
-    launch_options = {
-        "server_name": "0.0.0.0",
-        "server_port": int(os.getenv("PORT", "7860")),
-    }
-    if os.getenv("GRADIO_USERNAME") and os.getenv("GRADIO_PASSWORD"):
-        launch_options["auth"] = gradio_auth
-    demo.launch(**launch_options)
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=int(os.getenv("PORT", "7860")),
+    )

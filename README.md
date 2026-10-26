@@ -46,6 +46,19 @@ python main.py
 
 Examples: `włącz LED`, `wyłącz LED`, `jaki jest stan LED`.
 
+## GPIO controlled by the agent
+
+The agent can translate Polish natural-language requests into MQTT tool calls:
+
+- digital output: `ustaw GPIO 25 na wysoki przez 10 sekund`;
+- PWM output from `0` to `255`: `ustaw PWM 128 na GPIO 26 przez 5 sekund`;
+- digital input: `odczytaj przycisk z GPIO 34`;
+- analog ADC1 input from `0` to `4095`: `odczytaj wejście analogowe z GPIO 34`.
+
+Allowed output/PWM pins are `2, 4, 5, 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33`. Allowed digital and analog input pins are `32, 33, 34, 35, 36, 39`. Timed digital outputs return to LOW and timed PWM outputs return to `0`; duration is limited to 3600 seconds. The firmware validates pins and durations independently of the LLM.
+
+The current PWM tool is for LEDs or motor-driver inputs. A servo needs a separate 50 Hz servo-specific command and power wiring; do not attach it directly to ESP32 3.3 V power.
+
 ## Web chat and Render
 
 Run the Gradio chat locally from the repository root:
